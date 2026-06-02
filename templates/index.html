@@ -2,24 +2,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GUDLFT Registration</title>
+    <title>GUDLFT Board</title>
 </head>
 <body>
-    <h1>Welcome to the GUDLFT Registration Portal!</h1>
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-        <ul>
-        {% for message in messages %}
-            <li>{{ message }}</li>
-        {% endfor %}
-        </ul>
-    {% endif %}
-    {% endwith %}
-    Please enter your secretary email to continue:
-    <form action="showSummary" method="post">
-        <label for="email">Email:</label>
-        <input type="email" name="email" id=""/>
-        <button type="submit">Enter</button>
-    </form>
+    <a href="/login">Login</a>
+    <table>
+    <tr>
+        <th>Club</th>
+        <th>Points</th>
+    </tr>
+    {% for club in clubs %}
+    <tr>
+        <td>{{ club['name'] }}</td>
+        <td>{{ club['points'] }}</td>
+    </tr>
+    {% endfor %}
+</table>
 </body>
 </html>

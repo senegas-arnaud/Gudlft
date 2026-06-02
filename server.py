@@ -7,11 +7,18 @@ def loadClubs():
          listOfClubs = json.load(c)['clubs']
          return listOfClubs
 
-
 def loadCompetitions():
     with open('competitions.json') as comps:
          listOfCompetitions = json.load(comps)['competitions']
          return listOfCompetitions
+    
+def saveClubs(clubs):
+    with open('clubs.json', 'w') as c:
+        json.dump({'clubs': clubs}, c, indent=4)
+
+def saveCompetitions(competitions):
+    with open('competitions.json', 'w') as comps:
+        json.dump({'competitions': competitions}, comps, indent=4)
 
 
 app = Flask(__name__)
@@ -22,7 +29,11 @@ clubs = loadClubs()
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.html', clubs=clubs)
+
+@app.route('/login')
+def login():
+    return render_template('login.html')
 
 @app.route('/showSummary', methods=['POST'])
 def showSummary():
@@ -30,7 +41,7 @@ def showSummary():
     
     if not results:
         flash("Sorry, that email was not found.")
-        return render_template('index.html')
+        return render_template('login.html')
     
     club = results[0]
     return render_template('welcome.html', club=club, competitions=competitions)
@@ -71,12 +82,16 @@ def purchasePlaces():
 
     competition['numberOfPlaces'] = int(competition['numberOfPlaces']) - places_required
     club['points'] = int(club['points']) - places_required
+    saveClubs(clubs)
+    saveCompetitions(competitions)
     flash('Great-booking complete!')
     return render_template('welcome.html', club=club, competitions=competitions)
 
 
 
-# TODO: Add route for points display
+@app.route('/pointsBoard', methods=['GET'])
+def pointsBoard():
+    return render_template('index.html', clubs=clubs)
 
 
 @app.route('/logout')
