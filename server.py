@@ -51,11 +51,8 @@ def showSummary():
 def book(competition,club):
     foundClub = [c for c in clubs if c['name'] == club][0]
     foundCompetition = [c for c in competitions if c['name'] == competition][0]
-    if foundClub and foundCompetition:
-        return render_template('booking.html',club=foundClub,competition=foundCompetition)
-    else:
-        flash("Something went wrong-please try again")
-        return render_template('welcome.html', club=club, competitions=competitions)
+    return render_template('booking.html',club=foundClub,competition=foundCompetition)
+
 
 
 @app.route('/purchasePlaces', methods=['POST'])
@@ -80,8 +77,8 @@ def purchasePlaces():
         flash("Not enough places in this competition")
         return render_template('booking.html', club=club, competition=competition)
 
-    competition['numberOfPlaces'] = int(competition['numberOfPlaces']) - places_required
-    club['points'] = int(club['points']) - places_required
+    competition['numberOfPlaces'] = str(int(competition['numberOfPlaces']) - places_required)
+    club['points'] = str(int(club['points']) - places_required)
     saveClubs(clubs)
     saveCompetitions(competitions)
     flash('Great-booking complete!')
